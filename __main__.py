@@ -110,7 +110,7 @@ def feature_view(
 
     ax = fig.add_subplot(grid_spec[total_rows-3:,:])
     ax.axis("off")
-    ax.set_title("Prediction : {}\nProbability: {}".format(str(digit_prediction),str(np.max(prediction))),fontsize=48)
+    ax.set_title("Prediction : {}\nProbability: {:.2f}".format(str(digit_prediction),np.max(prediction)),fontsize=48)
 
     fig.savefig(os.path.join("feature_views","{}.png".format(sup_title)),dpi=300,cmap="gray")
     plt.close(fig)
@@ -131,9 +131,9 @@ if __name__ == "__main__":
 
 
     model = create_model()
-    model.fit(x_train,y_train,batch_size=512,epochs=100,steps_per_epoch=50,verbose=0)
-
-    model.evaluate(x_test,y_test,verbose=1)
+    # model.fit(x_train,y_train,batch_size=512,epochs=100,steps_per_epoch=50,verbose=0)
+    #
+    # model.evaluate(x_test,y_test,verbose=1)
 
     tf.keras.utils.plot_model(model, os.path.join("mnist_model.png"), show_shapes=True)
 
