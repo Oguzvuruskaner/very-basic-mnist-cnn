@@ -96,7 +96,8 @@ def feature_view(
             row = filter_index //8
             column = filter_index % 8
             ax = fig.add_subplot(grid_spec[current_row+row,column])
-            ax.imshow(filter,cmap="gray")
+            # Images are not in valid position because of transpose.
+            ax.imshow(np.rot90(filter,3),cmap="gray")
 
 
         current_row += row_count*4 + 1
