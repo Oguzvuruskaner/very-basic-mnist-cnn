@@ -102,6 +102,13 @@ def feature_view(
 
         current_row += row_count*4 + 1
 
+    prediction = model.predict(np.array(normalize(img)).reshape((1,28,28)))
+    # Prediction returns one hot encoded matrix.
+    digit_prediction = np.argmax(prediction)
+
+    ax = fig.add_subplot(grid_spec[current_row:current_row])
+    ax.suptitle("Prediction : {}".format(str(digit_prediction)))
+
     fig.savefig(os.path.join("feature_views","{}.png".format(sup_title)),dpi=300,cmap="gray")
     plt.close(fig)
 
