@@ -2,7 +2,6 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-
 from tqdm import trange
 
 
@@ -63,7 +62,7 @@ def feature_view(
         size_inches=1
 ):
 
-    total_rows = 3 + 5 * 4 + 9 * 4 + 17 * 3
+    total_rows = 3 + 5 * 4 + 9 * 4 + 17 * 3 + 4
 
     fig = plt.figure(constrained_layout = False)
     fig.set_size_inches(8*size_inches,total_rows * size_inches)
@@ -71,7 +70,7 @@ def feature_view(
     grid_spec = fig.add_gridspec(total_rows,8)
 
 
-    ax = fig.add_subplot(grid_spec[0,:])
+    ax = fig.add_subplot(grid_spec[0:1,:])
     ax.set_title("Original Image",fontsize=48)
     ax.imshow(img,cmap="gray")
 
@@ -97,7 +96,10 @@ def feature_view(
             column = filter_index % 8
             ax = fig.add_subplot(grid_spec[current_row+row,column])
             # Images are not in valid position because of transpose.
-            ax.imshow(np.rot90(filter,3),cmap="gray")
+            ax.imshow(
+                np.flip(np.rot90(filter,3),axis=1),
+                cmap="gray"
+            )
 
 
         current_row += row_count*4 + 1
@@ -106,8 +108,9 @@ def feature_view(
     # Prediction returns one hot encoded matrix.
     digit_prediction = np.argmax(prediction)
 
-    ax = fig.add_subplot(grid_spec[current_row:current_row])
-    ax.suptitle("Prediction : {}".format(str(digit_prediction)))
+    ax = fig.add_subplot(grid_spec[total_rows-3:,:])
+    ax.axis("off")
+    ax.set_title("Prediction : {}\nProbability: {}".format(str(digit_prediction),str(np.max(prediction))),fontsize=48)
 
     fig.savefig(os.path.join("feature_views","{}.png".format(sup_title)),dpi=300,cmap="gray")
     plt.close(fig)
@@ -132,8 +135,10 @@ if __name__ == "__main__":
 
     model.evaluate(x_test,y_test,verbose=1)
 
+    tf.keras.utils.plot_model(model, os.path.join("mnist_model.png"), show_shapes=True)
 
     for i in trange(TOTAL_TESTS):
         feature_view(model,x_test[i],str(i))
 
-    tf.keras.utils.plot_model(model, os.path.join("mnist_model.png"), show_shapes=True)
+
+
