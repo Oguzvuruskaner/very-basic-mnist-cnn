@@ -131,9 +131,8 @@ if __name__ == "__main__":
 
 
     model = create_model()
-    # model.fit(x_train,y_train,batch_size=512,epochs=100,steps_per_epoch=50,verbose=0)
-    #
-    # model.evaluate(x_test,y_test,verbose=1)
+    model.fit(x_train,y_train,batch_size=512,epochs=100,steps_per_epoch=50,verbose=0)
+    model.evaluate(x_test,y_test,verbose=1)
 
     tf.keras.utils.plot_model(model, os.path.join("mnist_model.png"), show_shapes=True)
 
